@@ -7,8 +7,22 @@ router.get ('/add', (req,res) =>{
     res.render('links/add');
 });
 
-router.post ('/add', (req,res) => {
+router.post ('/add', async (req,res) => {
+   const { title, url, description } = req.body;
+   const newLink = {
+        title,
+        url,
+        description
+   };
+   await pool.query('INSERT INTO links set ?',[newLink]);
     res.send ('recived')
 });
 
-module.exports= router;
+// SE ROMPE DB
+router.get ('/', async (req,res) => {
+  const links = await pool.query('SELECT * FROM links');
+  console.log(links);
+  res.send('listas iran aqui');
+});
+
+module.exports = router;
